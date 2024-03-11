@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Szakdoga8.Logic;
 using Szakdoga8.Translations;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//
+builder.Services.AddHttpClient<TranslationLogic>(client =>
+{
+   // client.BaseAddress = new Uri(Configuration["ApiBase"]);
+});
+
+builder.Services.AddTransient<TranslationLogic>();
+
+//builder.Services.Add<TranslationLogic>();
+
+
 builder.Services.AddDbContext<TranslationsContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
@@ -24,6 +36,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+
+app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+
 
 app.UseAuthorization();
 
