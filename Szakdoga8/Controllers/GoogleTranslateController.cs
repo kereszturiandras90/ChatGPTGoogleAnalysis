@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Net;
 using System.Web;
 using Szakdoga8.Logic;
@@ -44,6 +45,13 @@ namespace Szakdoga8.Controllers
 
             return CreatedAtAction("GetLatestTranslation", new { id = translation.Id }, translation);
         }
+      /*  [HttpGet]
+        public async Task<ActionResult<Translation>> DetectLanguage(Translation translation) {
+            translation.SourceLanguage = _logic.DetectLanguage(translation.InputText);
+
+            return translation;
+
+        }*/
 
         [HttpGet]
         public async Task<ActionResult<Translation>> GetLatestTranslation()
@@ -57,5 +65,28 @@ namespace Szakdoga8.Controllers
 
             return translation;
         }
+
+        [HttpPut()]
+        public async Task<IActionResult> AddRating(Translation updateTranslation)
+        {
+            var translation = _context.Translations.OrderByDescending(x => x.Id).FirstOrDefault();
+
+            if (translation == null)
+            {
+                return NotFound();
+            }
+
+            translation.Feedback = updateTranslation.Feedback;
+            translation.FeedbackGoogle = updateTranslation.FeedbackGoogle;
+            translation.FeedbackGpt = updateTranslation.FeedbackGpt;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(translation);
+
+
+        }
+
+
     }
 }

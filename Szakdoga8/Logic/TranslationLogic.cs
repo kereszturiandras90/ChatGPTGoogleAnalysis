@@ -3,6 +3,8 @@ using OpenAI_API;
 using System.Net;
 using System.Web;
 using System.CodeDom;
+using LanguageDetection;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Szakdoga8.Logic
 {
@@ -11,7 +13,8 @@ namespace Szakdoga8.Logic
 
         public TranslationLogic()
         {
-                
+            
+
         }
         public  string GoogleTranslation(string text, string fromLanguage, string toLanguage)
         {
@@ -55,6 +58,13 @@ namespace Szakdoga8.Logic
             {
                 return null;
             }
+        }
+
+        public string DetectLanguage(string text)
+        {
+            var detector = new LanguageDetector();
+            detector.AddAllLanguages();
+            return detector.Detect(text).Substring(0,2);
         }
     }
 }
