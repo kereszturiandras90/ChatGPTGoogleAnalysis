@@ -37,8 +37,14 @@ namespace Szakdoga8.Controllers
                translation.OutputTextGpt = gptTranslationResult;
                translation.OutputTextGoogle = googleTranslateResult;*/
 
-            translation.OutputTextGpt = _logic.ChatGPTTranslation(translation.InputText, translation.SourceLanguage, translation.TargetLanguage);
+             translation.OutputTextGpt = _logic.ChatGPTTranslation(translation.InputText, translation.SourceLanguage, translation.TargetLanguage);
             translation.OutputTextGoogle = _logic.GoogleTranslation(translation.InputText, translation.SourceLanguage, translation.TargetLanguage);
+
+            if (translation.ReferenceTranslation != null && translation.ReferenceTranslation != "") {
+
+                translation.GoogleBleu = _logic.CalculateBLEU(translation.ReferenceTranslation, translation.OutputTextGoogle);
+                translation.Gptbleu = _logic.CalculateBLEU(translation.ReferenceTranslation, translation.OutputTextGpt);
+            } 
 
             _context.Translations.Add(translation);
             await _context.SaveChangesAsync();

@@ -19,7 +19,7 @@ public partial class TranslationsContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=Translations;Trusted_Connection=True");
+        => optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=Translations;Trusted_Connection=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -29,16 +29,22 @@ public partial class TranslationsContext : DbContext
 
             entity.ToTable("Translation");
 
+            entity.Property(e => e.DateTimeOfTranslation)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
             entity.Property(e => e.Feedback).HasMaxLength(400);
             entity.Property(e => e.FeedbackGoogle).HasMaxLength(400);
             entity.Property(e => e.FeedbackGpt)
                 .HasMaxLength(400)
                 .HasColumnName("FeedbackGPT");
+            entity.Property(e => e.GoogleBleu).HasColumnName("GoogleBLEU");
+            entity.Property(e => e.Gptbleu).HasColumnName("GPTBLEU");
             entity.Property(e => e.InputText).HasMaxLength(4000);
             entity.Property(e => e.OutputTextGoogle).HasMaxLength(4000);
             entity.Property(e => e.OutputTextGpt)
                 .HasMaxLength(4000)
                 .HasColumnName("OutputTextGPT");
+            entity.Property(e => e.ReferenceTranslation).HasMaxLength(4000);
             entity.Property(e => e.SourceLanguage).HasMaxLength(2);
             entity.Property(e => e.TargetLanguage).HasMaxLength(2);
         });

@@ -22,4 +22,12 @@ public partial class Translation
     public string? FeedbackGpt { get; set; }
 
     public string? Feedback { get; set; }
+
+    public double? GoogleBleu { get; set; }
+
+    public double? Gptbleu { get; set; }
+
+    public string? ReferenceTranslation { get; set; }
+
+    public DateTime? DateTimeOfTranslation { get; set; }
 }

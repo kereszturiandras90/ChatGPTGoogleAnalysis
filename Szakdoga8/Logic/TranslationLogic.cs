@@ -5,6 +5,8 @@ using System.Web;
 using System.CodeDom;
 using LanguageDetection;
 using static System.Net.Mime.MediaTypeNames;
+using BLEU;
+using BleuNet;
 
 namespace Szakdoga8.Logic
 {
@@ -65,6 +67,28 @@ namespace Szakdoga8.Logic
             var detector = new LanguageDetector();
             detector.AddAllLanguages();
             return detector.Detect(text).Substring(0,2);
+        }
+
+        public double CalculateBLEU(string reference, string candidate)
+        {
+            string[] referenceArray = reference.Split(' ');
+            string[] candidateArray = candidate.Split(' ');
+
+            double bleuScore;
+
+            if (referenceArray.Length < 4)
+            {
+                bleuScore =  Metrics.SentenceBleu(referenceArray, candidateArray, weights: [0.5, 0.5]);
+            }
+            else {
+                bleuScore = Metrics.SentenceBleu(referenceArray, candidateArray);
+            }
+            return bleuScore;
+
+          //  BleuNet.Metrics. metric = new BleuMetric();
+           // double bleuScore = Metrics.SentenceBleu(referenceArray, candidateArray);
+            
+            //Console.WriteLine($"BLEU Score: {bleuScore}");
         }
     }
 }
