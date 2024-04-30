@@ -30,4 +30,16 @@ public partial class Translation
     public string? ReferenceTranslation { get; set; }
 
     public DateTime? DateTimeOfTranslation { get; set; }
+
+    public string? Classification { get; set; }
+
+    public int? GoogleLike { get; set; }
+
+    public int? GptLike { get; set; }
+
+    public bool? IsBackTranslationActive { get; set; }
+
+    public string? GoogleBackTranslation { get; set; }
+
+    public string? GptBackTranslation { get; set; }
 }

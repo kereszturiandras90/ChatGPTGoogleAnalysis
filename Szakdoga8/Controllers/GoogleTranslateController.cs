@@ -44,7 +44,12 @@ namespace Szakdoga8.Controllers
 
                 translation.GoogleBleu = _logic.CalculateBLEU(translation.ReferenceTranslation, translation.OutputTextGoogle);
                 translation.Gptbleu = _logic.CalculateBLEU(translation.ReferenceTranslation, translation.OutputTextGpt);
-            } 
+            }
+
+            if (translation.IsBackTranslationActive == true) {
+                translation.GoogleBackTranslation = _logic.GoogleTranslation(translation.OutputTextGoogle, translation.TargetLanguage, translation.SourceLanguage);
+                translation.GptBackTranslation = _logic.ChatGPTTranslation(translation.OutputTextGpt, translation.TargetLanguage, translation.SourceLanguage);
+            }
 
             _context.Translations.Add(translation);
             await _context.SaveChangesAsync();
@@ -85,6 +90,9 @@ namespace Szakdoga8.Controllers
             translation.Feedback = updateTranslation.Feedback;
             translation.FeedbackGoogle = updateTranslation.FeedbackGoogle;
             translation.FeedbackGpt = updateTranslation.FeedbackGpt;
+            translation.GptLike = updateTranslation.GptLike;
+            translation.GoogleLike = updateTranslation.GoogleLike;
+            translation.Classification = updateTranslation.Classification;
 
             await _context.SaveChangesAsync();
 

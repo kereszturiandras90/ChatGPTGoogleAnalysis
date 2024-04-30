@@ -7,6 +7,8 @@ using LanguageDetection;
 using static System.Net.Mime.MediaTypeNames;
 using BLEU;
 using BleuNet;
+using System.IO;
+using System.Linq;
 
 namespace Szakdoga8.Logic
 {
@@ -20,6 +22,14 @@ namespace Szakdoga8.Logic
         }
         public  string GoogleTranslation(string text, string fromLanguage, string toLanguage)
         {
+            if (fromLanguage == "cn") {
+                fromLanguage = "zh-CN";
+            }
+
+            if (toLanguage == "cn")
+            {
+                toLanguage = "zh-CN";
+            }
             var url = $"https://translate.googleapis.com/translate_a/single?client=gtx&sl={fromLanguage}&tl={toLanguage}&dt=t&q={HttpUtility.UrlEncode(text)}";
             var webClient = new WebClient
             {
@@ -28,8 +38,35 @@ namespace Szakdoga8.Logic
             var result = webClient.DownloadString(url);
             try
             {
-                result = result.Substring(4, result.IndexOf("\"", 4, StringComparison.Ordinal) - 4);
-                return result;
+
+
+                string resultFirstLine = result.Substring(4, result.IndexOf("\"", 4, StringComparison.Ordinal) - 4);
+                resultFirstLine = resultFirstLine.Replace("\n", " ");
+                resultFirstLine = resultFirstLine.Replace("\\n", " ");
+
+                string substring = "]]],[";
+                 string[] parts = result.Split(new string[] { substring }, StringSplitOptions.None);
+
+                bool IsFirstElement = true;
+                foreach (string part in parts)
+                {
+                    if (!IsFirstElement)
+                    {
+                        int index = part.IndexOf("\"");
+                        if (index != -1)
+                        {
+             
+                            string subpart = part.Substring(4, part.IndexOf("\"", 4, StringComparison.Ordinal) - 4);
+                            subpart = subpart.Replace("\n", " ");
+                            subpart = subpart.Replace("\\n", " ");
+                            resultFirstLine = resultFirstLine + " " + subpart; 
+                        }
+                    } else
+                    {
+                        IsFirstElement = false;
+                    }
+                }
+                return resultFirstLine;
             }
             catch
             {
@@ -38,14 +75,13 @@ namespace Szakdoga8.Logic
         }
 
         public  string ChatGPTTranslation(string text, string fromLanguage, string toLanguage) {
-            //your OpenAI API key
+            
             string apiKey = "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";
             string answer = string.Empty;
             var openai = new OpenAIAPI(apiKey);
             CompletionRequest completion = new CompletionRequest();
             completion.Prompt = $"Please translate the following text from {fromLanguage} to {toLanguage}: {text}";
-            // completion.Model = OpenAI_API.Model.DavinciText;
-            completion.MaxTokens = 4000;
+            completion.MaxTokens = 1000;
             var result = openai.Completions.CreateCompletionAsync(completion);
             if (result != null)
             {
@@ -53,7 +89,7 @@ namespace Szakdoga8.Logic
                 {
                     answer = item.Text;
                 }
-                answer = answer.Substring(answer.LastIndexOf('\n') + 1);
+                answer = answer.Replace('\n', ' ');
                 return answer;
             }
             else

@@ -29,6 +29,7 @@ public partial class TranslationsContext : DbContext
 
             entity.ToTable("Translation");
 
+            entity.Property(e => e.Classification).HasMaxLength(4000);
             entity.Property(e => e.DateTimeOfTranslation)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
@@ -37,7 +38,9 @@ public partial class TranslationsContext : DbContext
             entity.Property(e => e.FeedbackGpt)
                 .HasMaxLength(400)
                 .HasColumnName("FeedbackGPT");
+            entity.Property(e => e.GoogleBackTranslation).HasMaxLength(4000);
             entity.Property(e => e.GoogleBleu).HasColumnName("GoogleBLEU");
+            entity.Property(e => e.GptBackTranslation).HasMaxLength(4000);
             entity.Property(e => e.Gptbleu).HasColumnName("GPTBLEU");
             entity.Property(e => e.InputText).HasMaxLength(4000);
             entity.Property(e => e.OutputTextGoogle).HasMaxLength(4000);

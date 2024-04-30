@@ -24,7 +24,7 @@ namespace Szakdoga8.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Translation>>> GetTranslations()
         {
-            return await _context.Translations.ToListAsync();
+            return await _context.Translations.OrderBy(x => x.Id).Reverse().ToListAsync();
         }
 
         // GET: api/Translations/5
