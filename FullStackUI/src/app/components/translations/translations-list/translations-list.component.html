@@ -1,0 +1,48 @@
+<div>
+    <h1 class="mb-3">Translations</h1>
+
+    <table class="table" *ngIf="translations">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>InputText</th>
+                <th>OutputTextGoogle</th>
+                <th>OutputTextGPT</th>
+                <th>SourceLanguage</th>
+                <th>TargetLanguage</th>
+                <th>FeedbackGoogle</th>
+                <th>FeedbackGPT</th>
+                <th>Feedback</th>
+                <th>ReferenceTranslation</th>
+                <th>GoogleBleu</th>
+                <th>GptBleu</th>
+                <th>DateTime</th>
+                <th>Categories</th>
+                <th>GptLike</th>
+                <th>GoogleLike</th>
+            </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let translation of translations">
+                <td>{{translation.id}}</td>
+                <td>{{translation.inputText}}</td>
+                <td>{{translation.outputTextGoogle}}</td>
+                <td>{{translation.outputTextGpt}}</td>
+                <td>{{translation.sourceLanguage}}</td>
+                <td>{{translation.targetLanguage}}</td>
+                <td>{{translation.feedbackGoogle}}</td>
+                <td>{{translation.feedbackGpt}}</td>
+                <td>{{translation.feedback}}</td>
+                <td>{{translation.referenceTranslation}}</td>
+                <td>{{translation.googleBleu}}</td>
+                <td>{{translation.gptbleu}}</td>
+                <td>{{translation.dateTimeOfTranslation}}</td> 
+                <td>{{translation.classification}}</td>
+                <td>{{translation.gptLike}}</td>
+                <td>{{translation.googleLike}}</td>
+          </tr>
+          
+        </tbody>
+    </table>
+    <p *ngIf="!translations">No translations found</p>
+</div>

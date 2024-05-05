@@ -1,0 +1,196 @@
+<div class="container my-5">
+<h1 class="mb-3">Add new Translation</h1>
+<div class="row"> 
+<div class="col-6">   
+
+    <form (change)="onFormChange()" #form ngForm>
+     <!-- <select>
+       <option [ngValue]="null" disabled>Select Input Language</option>
+        <option *ngFor="let language of languages; index as i" [ngValue]="language.code" >{{ language.language }}</option>
+      </select> -->
+
+
+      <div class="samel">
+        <select [(ngModel)]="addTranslationRequest.sourceLanguage" name="sourceLanguage" placeholder="select a source language" (change)="onLanguageSelected(addTranslationRequest.sourceLanguage)" id="sourceLanguage">
+          <option value="" disabled selected hidden>Choose input language</option>
+          <option [ngValue]="null" disabled>Select Input Language</option>
+          <option *ngFor="let language of getRecentlyUsedLanguages()" [ngValue]="language.code" >
+            {{ language.language }}
+          </option>
+          <option disabled>───────────</option>
+          <option *ngFor="let language of languages" [ngValue]="language.code">{{ language.language }}</option>
+        </select> 
+
+        <button (click)="swapValues()" class="swap-button" mat-raised-button matTooltip="Reverse source and target languages" id="swapButton">
+          <mat-icon>cached</mat-icon> 
+        </button>  
+
+        <select [(ngModel)]="addTranslationRequest.targetLanguage" name="targetLanguage" placeholder="select a target language" (change)="onLanguageSelected(addTranslationRequest.targetLanguage)" id="targetLanguage">
+          <option value="" disabled selected hidden>Choose target language</option>
+          <option [ngValue]="null" disabled>Select Target Language</option>
+          <option *ngFor="let language of getRecentlyUsedLanguages()" [ngValue]="language.code" >
+            {{ language.language }}
+          </option>
+          <option disabled>───────────</option>
+          <option *ngFor="let language of languages" [ngValue]="language.code">{{ language.language }}</option>
+        </select>
+      </div>
+
+
+      <div class="samel-nospace">
+     
+        <label>
+          <input type="checkbox" [(ngModel)]="automaticDetection" name="automaticDetection" (change)="onInputChange($event)" id="automaticDetection"> Automatic Language Detection
+        </label> 
+
+        <label class="padding-10">
+          <input type="checkbox" [(ngModel)]="addTranslationRequest.isBackTranslationActive" name="isBackTranslationActive" id="backTranslation"> Enable Back-Translation
+        </label>
+
+    <!--    <label>
+          <input type="checkbox" [(ngModel)]="voiceDetection" name="voiceDetection" (change)="onVoiceDetection($event)"> Voice Detection
+        </label> -->
+
+
+      
+       
+
+
+
+      </div>
+    
+        <div class="mb-3">
+          <label for="inputText">Input Text</label>
+          <textarea type="text" class="form-control" id="inputText"  [(ngModel)] = "addTranslationRequest.inputText" name="inputText" (blur)="onInputChange($event)" placeholder="Write a text to be translated" maxlength="4000" [rows]="(addTranslationRequest.inputText.length / 65) + 1 ">{{voiceInputText}}</textarea>
+          
+        </div>
+
+        <div class="samel">
+       <div class="microfone">
+        <button mat-icon-button (click)="onVoiceDetection()" class="rounded">
+          <mat-icon>{{ voiceDetection ? 'mic' : 'mic_off' }}</mat-icon>
+        </button>
+      </div>
+
+      <div class="counter">{{ addTranslationRequest.inputText.length }} / 4000</div>
+    </div>
+
+        <div class="mb-3">
+          <label for="referenceTranslation">Reference Translation - optional </label>
+          <textarea type="text" class="form-control" id="referenceTranslation"  [(ngModel)] = "addTranslationRequest.referenceTranslation" name="referenceTranslation" (blur)="onInputChange($event)" placeholder="Add a reference text, to see metric values for the translations" maxlength="4000" [rows]="(addTranslationRequest.referenceTranslation.length / 65) + 1" ></textarea>
+          <div class="counter" class="samel-end">{{ addTranslationRequest.referenceTranslation.length }} / 4000</div>
+        </div> 
+
+
+        <div class="samel-nospace">
+          <button class="btn btn-primary" [disabled]="panelOpenState" (click)="onSubmit()">Translate</button>
+       <!--    <label>
+             <input type="checkbox" [(ngModel)]="automaticDetection" name="automaticDetection" (change)="onInputChange($event)"> Automatic Language Detection
+          </label> -->
+        </div> 
+
+
+
+     <!--    <div class="mb-3">
+            <label for="targetLanguage">Select Target Language</label>
+            <input type="text" class="form-control" id="targetLanguage" [(ngModel)] = "addTranslationRequest.targetLanguage" name="targetLanguage">
+            
+          </div> -->
+
+       
+
+<div class="samel" *ngIf="addTranslationRequest.outputTextGoogle != '' || addTranslationRequest.outputTextGpt != ''">
+          <div class="mb-3">
+            <label for="outputTextGoogle">Translation with Google</label>
+            <textarea type="text" class="form-control" id="outputTextGoogle"  name="outputTextGoogle" [(ngModel)] = "addTranslationRequest.outputTextGoogle" ></textarea>
+            <h3 *ngIf="addTranslationRequest.referenceTranslation != ''" id="GoogleBleu">BLEU score: {{addTranslationRequest.googleBleu}}</h3>
+            
+          </div>
+          <div class="mb-3">
+            <label for="outputTextGpt">Translation with Chat GPT</label>
+            <textarea type="text" class="form-control" id="outputTextGpt"  name="outputTextGpt" [(ngModel)] = "addTranslationRequest.outputTextGpt"></textarea>
+            <h3 *ngIf="addTranslationRequest.referenceTranslation != ''" id="GptBleu">BLEU score: {{addTranslationRequest.gptbleu}}</h3>
+          </div>
+        </div>
+
+<div class="samel" *ngIf="addTranslationRequest.googleBackTranslation != '' || addTranslationRequest.gptBackTranslation != ''">
+           <div class="mb-3">
+            <label for="googleBackTranslation">Back-Translation with Google</label>
+            <textarea type="text" class="form-control" id="googleBackTranslation"  name="googleBackTranslation" [(ngModel)] = "addTranslationRequest.googleBackTranslation"></textarea>
+           </div>
+
+           <div class="mb-3">
+            <label for="gptBackTranslation">Back-Translation with GPT</label>
+            <textarea type="text" class="form-control" id="gptBackTranslation"  name="gptBackTranslation" [(ngModel)] = "addTranslationRequest.gptBackTranslation"></textarea>
+           </div>
+        </div>
+
+
+
+<mat-accordion>
+<mat-expansion-panel [disabled]="!isActive" [expanded]="panelOpenState">
+<mat-expansion-panel-header (click)="togglePanel()">
+  <mat-panel-title>Title</mat-panel-title>
+  <mat-panel-description>
+    Click here to {{panelOpenState ? 'close' : 'open'}} rating
+  </mat-panel-description>
+</mat-expansion-panel-header>
+
+        <div class="samel">
+          <div class="mb-3">
+            <label for="feedbackGoogle">Feedback for Google Translate</label>
+         
+            <input type="text" class="form-control" id="feedbackGoogle"  name="feedbackGoogle" [(ngModel)] = "addTranslationRequest.feedbackGoogle" [disabled]="!panelOpenState || addTranslationRequest.outputTextGoogle == ''">
+            <app-like-dislike [likeValue]="parentLikeValueGoogle" (valueChanged)="onValueChangedGoogle($event)"></app-like-dislike>
+          </div>
+          <div class="mb-3">
+            <label for="feedbackGpt">Feedback for Chat GPT</label>
+            <input type="text" class="form-control" id="feedbackGpt"  name="feedbackGpt" [(ngModel)] = "addTranslationRequest.feedbackGpt" [disabled]="!panelOpenState || addTranslationRequest.outputTextGpt == ''">
+            <app-like-dislike [likeValue]="parentLikeValueGpt" (valueChanged)="onValueChangedGpt($event)"></app-like-dislike>
+       <!---     <div (click)="toggleColor()">
+              <mat-icon [ngClass]="iconClass">{{icon}}</mat-icon>
+              <mat-icon [ngClass]="iconClass">{{icon2}}</mat-icon>
+            </div> -->
+            
+          </div>
+        </div>
+
+          <div class="mb-3">
+            <label for="feedback">Overall Feedback</label>
+            <input type="text" class="form-control" id="feedback"  name="feedback" [(ngModel)] = "addTranslationRequest.feedback" [disabled]="!panelOpenState">
+            
+          </div>
+          <button (click) = "onSubmit()" class="btn btn-primary" [disabled]="!panelOpenState">Add Rating</button>
+
+
+
+          <mat-chip-set>
+            <mat-chip *ngFor="let category of categories; let i = index" 
+            (click)="toggleSelection(category)" (remove)="removeCategory(i)" [ngClass]="category.selected ? 'mat-chip-selected' : 'mat-chip'">
+              {{ category.name }}
+              
+              <mat-icon matChipRemove (click)="removeCategory(i)" class="mat-chip-removed">cancel</mat-icon> 
+            </mat-chip>
+          </mat-chip-set>
+          
+          <mat-form-field appearance="outline" class="add-chip">
+            <input matInput placeholder="Add category" [(ngModel)]="newCategory.name" (keydown.enter)="addCategory()" [ngModelOptions]="{standalone: true}" class="add-category">
+            <button mat-icon-button matSuffix (click)="addCategory()" aria-label="Add" type="button">
+              <mat-icon>add</mat-icon>
+            </button>
+          </mat-form-field>
+
+
+</mat-expansion-panel>
+</mat-accordion>
+
+
+       
+        
+      </form>
+
+</div>
+      </div>   
+
+
+

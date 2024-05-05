@@ -1,0 +1,4 @@
+<select>
+    <option value="" disabled selected>Select a language</option>
+    <option *ngFor="let language of languages" [value]="language.code">{{ language.language }}</option>
+  </select>

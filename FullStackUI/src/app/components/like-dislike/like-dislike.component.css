@@ -1,0 +1,13 @@
+mat-icon.active{
+    color: yellow;
+    padding-left: 5px;
+  }
+
+  mat-icon{
+    color: grey;
+    padding-left: 5px;
+  }
+
+  padding-5 {
+padding-left: 15px;
+  }

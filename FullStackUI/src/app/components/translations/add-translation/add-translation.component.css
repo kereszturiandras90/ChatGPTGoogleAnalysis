@@ -1,0 +1,113 @@
+.samel {
+    display: flex;
+    justify-content: space-between;
+}
+
+.samel-nospace {
+    display: flex;
+    justify-content: initial;
+}
+
+.samel-end {
+  display: flex;
+  justify-content: end;
+  font-size: 12px;
+}
+
+.mat-chip {
+    /*border-radius: 16px;*/
+    background-color: white;
+    color: grey;
+   /* margin: 4px;*/
+   border-collapse: collapse;
+   border-radius: 2em;
+
+    border-radius: 5px; 
+    border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+    padding: 20px;
+    width: 200px;
+    height: 10px;
+  }
+
+  .mat-chip-selected {
+    background-color: blue;
+    color: blue;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+      padding: 20px;
+      width: 200px;
+      height: 10px;
+  }
+  
+  .mat-chip-remove {
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .add-chip {
+    padding-left: 20px;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    padding: 20px;
+    width: 200px;
+    height: 10px;
+  }
+
+  .mat-icon-yellow{
+    color: yellow;
+  }
+
+  .mat-icon-grey{
+    color: grey;
+  }
+
+
+  .swap-button {
+    margin: 0 10px;
+    padding: 1px 10px;
+    cursor: pointer;
+    background-color: #ccc;
+    border: none;
+    border-radius: 5px;
+    font-size: 7px;
+    height: 25px;
+  }
+  
+  .swap-button:hover {
+    background-color: #aaa;
+  }
+  
+  .swap-button i {
+    font-size: 16px;
+  }
+
+  .microfone {
+    justify-content: center;
+    display: flex;
+    padding-bottom: 30px;
+    padding-left: 47%;
+  }
+
+  .add-category {
+    padding-left: 10px;
+  }
+
+.padding-10 {
+  padding-left: 10px;
+}
+
+.padding-5 {
+  padding-left: 5px;
+}
+
+.rounded {
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.counter {
+  font-size: 12px;
+}
