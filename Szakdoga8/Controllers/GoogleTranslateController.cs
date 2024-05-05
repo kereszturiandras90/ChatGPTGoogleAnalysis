@@ -25,18 +25,8 @@ namespace Szakdoga8.Controllers
 
         [HttpPost]
        // [Route("getGoogleTranslation")]
-        public async Task<ActionResult<Translation>> TranslateText( /*string text,  string fromLanguage, string toLanguage*/ Translation translation)
+        public async Task<ActionResult<Translation>> TranslateText(Translation translation)
         {
-            /*   string gptTranslationResult= _logic.ChatGPTTranslation(text, fromLanguage, toLanguage);
-               string googleTranslateResult = _logic.GoogleTranslation(text, fromLanguage, toLanguage);
-
-               Translation translation = new Translation();
-               translation.InputText = text;
-               translation.SourceLanguage = fromLanguage;
-               translation.TargetLanguage = toLanguage;
-               translation.OutputTextGpt = gptTranslationResult;
-               translation.OutputTextGoogle = googleTranslateResult;*/
-
              translation.OutputTextGpt = _logic.ChatGPTTranslation(translation.InputText, translation.SourceLanguage, translation.TargetLanguage);
             translation.OutputTextGoogle = _logic.GoogleTranslation(translation.InputText, translation.SourceLanguage, translation.TargetLanguage);
 
