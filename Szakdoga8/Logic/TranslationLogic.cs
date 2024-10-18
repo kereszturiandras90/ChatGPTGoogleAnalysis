@@ -76,7 +76,7 @@ namespace Szakdoga8.Logic
 
         public  string ChatGPTTranslation(string text, string fromLanguage, string toLanguage) {
             
-            string apiKey = "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";
+            string apiKey = "<YOUR-API-KEY>";
             string answer = string.Empty;
             var openai = new OpenAIAPI(apiKey);
             CompletionRequest completion = new CompletionRequest();
